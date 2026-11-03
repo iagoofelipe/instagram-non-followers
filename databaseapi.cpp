@@ -31,9 +31,9 @@ bool DatabaseAPI::updateInstagramUsersIgnore()
     try {
         mysqlx::Schema db = pSess->getSchema("instagram_non_followers");
         mysqlx::Table table = db.getTable("user");
-        table.select("profile")
-            .where("profile IN (:names")
-            .bind("names", );
+        // table.select("profile")
+        //     .where("profile IN (:names")
+        //     .bind("names", );
 
     } catch (mysqlx::Error &err) {
         error = err.what();

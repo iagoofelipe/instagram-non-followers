@@ -1,6 +1,8 @@
 #ifndef DATABASECONNFORM_H
 #define DATABASECONNFORM_H
 
+#include "appmodel.h"
+
 #include <QWidget>
 #include <QSettings>
 
@@ -13,19 +15,21 @@ class DatabaseConnForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit DatabaseConnForm(QWidget *parent = nullptr);
+    explicit DatabaseConnForm(AppModel *model, QWidget *parent = nullptr);
     ~DatabaseConnForm();
+
+    db_connection_params getDatabaseConnectionParams();
 
 private slots:
     void on_btnBox_accepted();
 
 signals:
-    void continued();
+    void continueRequired(db_connection_params);
     void canceled();
 
 private:
     Ui::DatabaseConnForm *ui;
-    QSettings cfg;
+    AppModel *model;
 };
 
 #endif // DATABASECONNFORM_H

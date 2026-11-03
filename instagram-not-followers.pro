@@ -21,6 +21,7 @@ HEADERS += \
     databaseconnform.h \
     entryform.h \
     mainwindow.h \
+    structs.h \
     tableform.h
 
 FORMS += \

@@ -2,15 +2,39 @@
 
 DatabaseAPI::DatabaseAPI() {}
 
-bool DatabaseAPI::connect()
+bool DatabaseAPI::connect(const db_connection_params& params)
 {
     try {
-        mysqlx::Session sess(
-            cfg.value("db_host", "127.0.0.1").toString().toStdString(),
-            33060,
-            cfg.value("db_user", "root").toString().toStdString(),
-            cfg.value("db_pass").toString().toStdString()
+        pSess = std::make_unique<mysqlx::Session>(
+            params.host.toStdString(),
+            params.port,
+            params.user.toStdString(),
+            params.password.toStdString()
         );
+    } catch (mysqlx::Error &err) {
+        error = err.what();
+        return false;
+    }
+
+    return true;
+}
+
+bool DatabaseAPI::updateInstagramUsersIgnore()
+{
+    if (!pSess) {
+        error = "no session found";
+        return false;
+    }
+
+
+
+    try {
+        mysqlx::Schema db = pSess->getSchema("instagram_non_followers");
+        mysqlx::Table table = db.getTable("user");
+        table.select("profile")
+            .where("profile IN (:names")
+            .bind("names", );
+
     } catch (mysqlx::Error &err) {
         error = err.what();
         return false;

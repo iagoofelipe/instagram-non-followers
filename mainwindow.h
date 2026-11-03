@@ -28,7 +28,7 @@ private:
     EntryForm::Source entryFormSource;
     QString entryFormContent;
 
-    void on_databaseConnForm_continued();
+    void on_databaseConnForm_continueRequired(db_connection_params params);
     void on_databaseConnForm_canceled();
     void on_entryForm_continueRequired(EntryForm::Source source, QString data);
 

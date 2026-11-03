@@ -5,16 +5,28 @@
 #include <QCoreApplication>
 
 AppModel::AppModel()
+    : db_conn_params(
+        cfg.value("db_host").toString(),
+        cfg.value("db_port", 33060).toInt(),
+        cfg.value("db_user").toString(),
+        cfg.value("db_pass").toString()
+      )
 {
     connect();
 }
 
 bool AppModel::connect()
 {
-    connected = db.connect();
+    connected = db.connect(db_conn_params);
     if (!connected)
         error = db.lastMessageError();
     return connected;
+}
+
+bool AppModel::connect(const db_connection_params& params)
+{
+    setDatabaseConnectionParams(params);
+    return connect();
 }
 
 InstagramUsers* AppModel::setUsersFromString(const QString& data)
@@ -67,4 +79,13 @@ InstagramUser* AppModel::getInstagramUserByProfile(const QString& profile)
 {
     auto it = users_hash.find(profile);
     return it != users_hash.end()? it.value() : nullptr;
+}
+
+void AppModel::setDatabaseConnectionParams(const db_connection_params& params)
+{
+    db_conn_params = params;
+    cfg.setValue("db_host", params.host);
+    cfg.setValue("db_port", params.port);
+    cfg.setValue("db_user", params.user);
+    cfg.setValue("db_pass", params.password);
 }

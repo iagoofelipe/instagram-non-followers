@@ -32,9 +32,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_databaseConnForm_continued()
+void MainWindow::on_databaseConnForm_continueRequired(db_connection_params params)
 {
-    model.connect()? setEntryForm() : setErrorForm();
+    model.connect(params)? setEntryForm() : setErrorForm();
 }
 
 void MainWindow::on_databaseConnForm_canceled()
@@ -74,8 +74,8 @@ void MainWindow::on_entryForm_continueRequired(EntryForm::Source source, QString
 
 void MainWindow::setDatabaseConnForm()
 {
-    DatabaseConnForm *view = new DatabaseConnForm;
-    connect(view, &DatabaseConnForm::continued, this, &MainWindow::on_databaseConnForm_continued);
+    DatabaseConnForm *view = new DatabaseConnForm(&model);
+    connect(view, &DatabaseConnForm::continueRequired, this, &MainWindow::on_databaseConnForm_continueRequired);
     connect(view, &DatabaseConnForm::canceled, this, &MainWindow::on_databaseConnForm_canceled);
     setCentralWidget(view);
 }
